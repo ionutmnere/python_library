@@ -57,15 +57,17 @@ if len(lines) < 1:
 
 print("Content in file: " + str(len(lines)) + " lines.")
 lines = "".join(lines)
+
+if os.path.isfile(OUTPUT_FILE):
+	os.remove(OUTPUT_FILE)
+	add_line_in_output_file(HEADER)
+	print("Old entries deleted from " + OUTPUT_FILE)
+
 merge_commits = re.findall(r'commit\s*(\S*)\nMerge:\s*([^\n]*)\n\s*Author:\s*([^\n]*)\n\s*Date: \s*([^\n]*)', lines, re.MULTILINE)
 if 0 == len(merge_commits):
 	print("No merge commits found!")
 else:
 	print("Found " + str(len(merge_commits)) + " merge commits.")
-	if os.path.isfile(OUTPUT_FILE):
-		os.remove(OUTPUT_FILE)
-		add_line_in_output_file(HEADER)
-		print("Old entries deleted from " + OUTPUT_FILE)
 	for entry in merge_commits:
 		add_entry_in_csv(entry);
 	print("Merge commits added in output file.")
